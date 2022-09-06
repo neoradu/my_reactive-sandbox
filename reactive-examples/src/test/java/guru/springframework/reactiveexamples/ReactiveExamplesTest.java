@@ -19,7 +19,7 @@ public class ReactiveExamplesTest {
     Person sam = new Person("Sam", "Axe");
     Person jesse = new Person("Jesse", "Porter");
 
-    @Test
+   /* @Test
     public void monoTests() throws Exception {
         //create new person mono
         Mono<Person> personMono = Mono.just(michael);
@@ -30,8 +30,36 @@ public class ReactiveExamplesTest {
         // output name
         log.info(person.sayMyName());
     }
-
+    */
+    private Person generatePersonCallable() {
+    	log.debug("!!! generatePersonCallable() called!");
+    	return new Person("gigelus", "gigelus");
+    }
+    
+    private Person getValue(Person p) {
+    	log.debug("!!! getValue() " + p.sayMyName());
+    	return p;
+    }
+    
+    private void error(Throwable t) {
+    	log.debug("!!! error()" + t.toString());
+    }
+    
+    private void end() {
+    	log.debug("!!! end()");
+    }
     @Test
+    public void monoFromCallable() {
+    	log.debug("!!! enter monoFromCallable()");
+    	Mono<Person> personMono = Mono.fromCallable(this::generatePersonCallable);
+    	
+    	log.debug("!!! personMono Created!");
+    	log.debug("!!! Subscribe personMono");
+    	personMono.subscribe(this::getValue, this::error,this::end);
+    	
+    }
+    
+ /*   @Test
     public void monoTransform() throws Exception {
         //create new person mono
         Mono<Person> personMono = Mono.just(fiona);
@@ -114,6 +142,6 @@ public class ReactiveExamplesTest {
                 .subscribe(person -> log.info(person.sayMyName()));
 
         countDownLatch.await();
-    }
+    }*/
 
 }
